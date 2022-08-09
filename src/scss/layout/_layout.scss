@@ -1,0 +1,28 @@
+/*=============== REUSABLE CSS CLASSES ===============*/
+.container {
+    width: 100%;
+    display: block;
+    margin: 0 auto;
+    padding: 0 space(3);
+
+    @include breakpoint-up($sm) {
+        padding: 0;
+        max-width: rem(540px);
+    }
+
+    @include breakpoint-up($md) {
+        max-width: rem(720px);
+    }
+
+    @include breakpoint-up($lg) {
+        max-width: rem(960px);
+    }
+
+    @include breakpoint-up($xl) {
+        max-width: rem(1140px);
+    }
+
+    @include breakpoint-up($xxl) {
+        max-width: rem(1320px);
+    }
+}
