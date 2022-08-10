@@ -13,8 +13,8 @@ require("colors");
 sass.compiler = require("node-sass");
 const path = join(__dirname, "src");
 const fileinclude = require("gulp-file-include");
-const imagemin = require("gulp-imagemin");
 const concat = require("gulp-concat");
+const imagemin = require("gulp-imagemin");
 const del = require("del");
 
 const cleanDist = () => del(["dist"]);
@@ -84,27 +84,15 @@ const imagesMin = () =>
         imagemin.svgo({
           plugins: [
             {
-              removeViewBox: false,
+              removeViewBox: true,
               collapseGroups: true,
+              cleanupIDs: false,
             },
           ],
         }),
       ]),
     )
     .pipe(dest("dist/img"));
-
-const exportWebP = () => {
-  return src(["./src/img/**/*.jpg", "./src/img/**/*.png"], { base: "src" })
-    .pipe(
-      imagemin([
-        webp({
-          quality: 60,
-        }),
-      ]),
-    )
-    .pipe(extReplace(".webp"))
-    .pipe(dest("./app/"));
-};
 
 const dev = (cb) => {
   browserSync.init({
