@@ -1,4 +1,4 @@
-const { series, parallel, src, dest, watch, lastRun, since } = require("gulp");
+const { series, parallel, src, dest, watch, lastRun } = require("gulp");
 const { sync } = require("glob");
 const sass = require("gulp-sass");
 const { join, basename } = require("path");
@@ -92,6 +92,19 @@ const imagesMin = () =>
       ]),
     )
     .pipe(dest("dist/img"));
+
+const exportWebP = () => {
+  return src(["./src/img/**/*.jpg", "./src/img/**/*.png"], { base: "src" })
+    .pipe(
+      imagemin([
+        webp({
+          quality: 60,
+        }),
+      ]),
+    )
+    .pipe(extReplace(".webp"))
+    .pipe(dest("./app/"));
+};
 
 const dev = (cb) => {
   browserSync.init({
