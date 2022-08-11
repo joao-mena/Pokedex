@@ -60,6 +60,15 @@ const minifyJS = () =>
     .pipe(sourcemaps.write("."))
     .pipe(dest("dist/js"));
 
+const pluginJS = () =>
+  src([
+    "node_modules/jquery/dist/jquery.min.js",
+    "node_modules/lazyload/lazyload.min.js",
+    "js/plugins/*.js",
+  ])
+    .pipe(concat("plugins.js"))
+    .pipe(dest("dist/js"));
+
 const compileHtml = () =>
   src(sync(join(path, "html", "*.html")))
     .pipe(cleanhtml())
@@ -75,7 +84,7 @@ const compileHtml = () =>
     .pipe(dest("dist"));
 
 const imagesMin = () =>
-  src(sync(join(path, "img", "**/*")), { since: lastRun(imagesMin) })
+  src(sync(join(path, "img", "**/*{png, jpg, jpeg}")))
     .pipe(
       imagemin([
         imagemin.gifsicle({ interlaced: true }),
@@ -133,6 +142,7 @@ const watchFiles = (cb) => {
 
 exports.default = series(
   cleanDist,
+  pluginJS,
   parallel(compileJS, imagesMin, compileSCSS),
   parallel(minifyCSS, minifyJS),
   compileHtml,

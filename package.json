@@ -37,6 +37,9 @@
     "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
-    "node-sass": "^4.14.1"
+    "jquery": "^3.6.0",
+    "lazyload": "^2.0.0-rc.2",
+    "node-sass": "^4.14.1",
+    "tiny-slider": "^2.9.4"
   }
 }
