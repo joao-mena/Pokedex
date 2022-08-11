@@ -140,6 +140,8 @@ const watchFiles = (cb) => {
   cb();
 };
 
+exports.cleanDist = cleanDist;
+
 exports.default = series(
   cleanDist,
   pluginJS,
