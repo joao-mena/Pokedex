@@ -15,6 +15,7 @@ const path = join(__dirname, "src");
 const fileinclude = require("gulp-file-include");
 const concat = require("gulp-concat");
 const imagemin = require("gulp-imagemin");
+const imagewebp = require("gulp-webp");
 const del = require("del");
 
 const cleanDist = () => del(["dist"]);
@@ -83,25 +84,28 @@ const compileHtml = () =>
     })
     .pipe(dest("dist"));
 
-const imagesMin = () =>
-  src(sync(join(path, "img", "**/*{png, jpg, jpeg}")))
+const optimizeimg = () =>
+  src(sync(join(path, "img", "**/*.{jpg,png}")), {
+    since: lastRun(optimizeimg),
+  })
     .pipe(
       imagemin([
-        imagemin.gifsicle({ interlaced: true }),
-        imagemin.jpegtran({ progressive: true }),
-        imagemin.optipng({ optimizationLevel: 5 }),
+        imagemin.jpegtran({ quality: 80, progressive: true }),
+        imagemin.optipng({ optimizationLevel: 2 }),
         imagemin.svgo({
           plugins: [
             {
-              removeViewBox: true,
+              removeViewBox: false,
               collapseGroups: true,
-              cleanupIDs: false,
             },
           ],
         }),
       ]),
     )
     .pipe(dest("dist/img"));
+
+const webpImage = () =>
+  src("dist/img/*.{jpg,png}").pipe(imagewebp()).pipe(dest("dist/img"));
 
 const dev = (cb) => {
   browserSync.init({
@@ -136,7 +140,7 @@ const watchFiles = (cb) => {
   const imageFiles = sync(join(path, "img", "**/*"));
   console.log(`👁️ ${"IMAGE".magenta} files we will watch... 👁️`.bold);
   console.table(imageFiles.map((path) => basename(path)));
-  watch(imageFiles, series(imagesMin, realoadBrowser));
+  watch(imageFiles, series(optimizeimg, webpImage, realoadBrowser));
   cb();
 };
 
@@ -144,8 +148,9 @@ exports.cleanDist = cleanDist;
 
 exports.default = series(
   cleanDist,
-  pluginJS,
-  parallel(compileJS, imagesMin, compileSCSS),
+  optimizeimg,
+  webpImage,
+  parallel(compileJS, pluginJS, compileSCSS),
   parallel(minifyCSS, minifyJS),
   compileHtml,
   watchFiles,
@@ -154,10 +159,11 @@ exports.default = series(
 
 exports.build = series(
   cleanDist,
+  optimizeimg,
+  webpImage,
   compileHtml,
   compileSCSS,
   compileJS,
   minifyCSS,
   minifyJS,
-  imagesMin,
 );

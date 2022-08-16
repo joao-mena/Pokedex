@@ -27,10 +27,10 @@ html {
  */
 
 body {
+	min-height: 100vh;
 	margin: 0;
 	font-family: var(--body-font);
 	font-size: var(--normal-font-size);
-	background-color: var(--body-color);
 	color: var(--text-color);
 	transition: 0.3s; /* For animation dark mode */
 }

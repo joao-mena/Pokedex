@@ -1,3 +1,33 @@
-main {
-  overflow: hidden;
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #f56a98, #fff);
+
+  main {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.hidden {
+  display: none !important;
+
+  &-xs {
+    @include breakpoint-down($lg) {
+      display: none !important;
+    }
+  }
+
+  &-sm {
+    @include breakpoint-down($md) {
+      display: none !important;
+    }
+  }
+
+  &-md {
+    @include breakpoint-up($lg) {
+      display: none !important;
+    }
+  }
 }
