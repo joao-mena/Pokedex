@@ -1,0 +1,18 @@
+.pokemon {
+  position: relative;
+
+  &__image {
+    position: absolute;
+    top: 30%;
+    left: 46%;
+    transform: translateX(-50%);
+    height: rem(100px);
+  }
+
+  &__data {
+    position: absolute;
+    top: 52%;
+    left: 55%;
+    transform: translateX(-50%);
+  }
+}
